@@ -3,7 +3,7 @@ import tensorflow as tf
 
 class myCallback(tf.keras.callbacks.Callback):
     def on_epoch_end(self, epoch, logs={}):
-        if(logs.get('accuracy') > 0.99):
+        if(logs.get('acc') >= 0.99):
             print("\nReached 99% accuracy so cancelling training!")
             self.model.stop_training = True
 
@@ -20,8 +20,12 @@ model = tf.keras.models.Sequential([
     tf.keras.layers.Dense(512, activation=tf.nn.relu),
     tf.keras.layers.Dense(10, activation=tf.nn.softmax)
 ])
-model.compile(optimizer='adam',
-              loss='sparse_categorical_crossentropy',
-              metrics=['accuracy'])
 
-model.fit(x_train, y_train, epochs=10, callbacks=[callbacks])
+model.compile(optimizer='adam',
+              loss='sparse_categorical_crossentropy', metrics=['acc'])
+
+# model fitting
+history = model.fit(x_train, y_train, epochs=10, callbacks=[callbacks])
+
+# model fitting
+# return history.epoch, history.history['acc'][-1]
